@@ -2,7 +2,7 @@ import tweepy
 import time
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 iTOKEN = '5817244e2eee03817157a946ca2ea992'
 iCIDADE = 4975
@@ -15,18 +15,33 @@ auth = tweepy.OAuthHandler(api_key, api_secret_key)
 auth.set_access_token(acess_key, acess_secret)
 
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+print('Iniciando o Bot')
+
+
+def principal():
+    try:
+        iURL = "http://apiadvisor.climatempo.com.br/api/v1/weather/locale/" + str(iCIDADE) + "/current?token=" + iTOKEN
+        iRESPONSE = requests.request("GET", iURL)
+        iRETORNO_REQ = json.loads(iRESPONSE.text)
+
+        Temperatura = iRETORNO_REQ['data']['temperature']
+        Condicao = str(iRETORNO_REQ['data']['condition'])
+        sensacao = str(iRETORNO_REQ['data']['sensation'])
+        velVento = str(iRETORNO_REQ['data']['wind_velocity'])
+    
+        if Temperatura < 20:
+            formatString = f'Clima em Lages:' + '\n'+ 'Hora local: '+datetime.today().strftime('%A, %B %d, %Y %H:%M:%S') + '\nSaia de Japona Homee!'+'\nTemperatura: ' + str(Temperatura) + '°C' + '\nSensação Térmica: ' + sensacao + '°C' + '\nCondição Atual: ' + Condicao + '\nVelocidade do vento: ' + velVento +' Km/h'
+        else:
+            formatString = f'Clima em Lages:' + '\n'+ 'Hora local: '+datetime.today().strftime('%A, %B %d, %Y %H:%M:%S') + '\nMas bah hame do ceu, ta calor.'+'\nTemperatura: ' + str(Temperatura) + '°C' + '\nSensação Térmica: ' + sensacao + '°C' + '\nCondição Atual: ' + Condicao + '\nVelocidade do vento: ' + velVento +' Km/h'
+        api.update_status(formatString)
+        print(f'Estou funcionando '+ datetime.today().strftime('%A, %B %d, %Y %H:%M:%S'))
+    except:
+        print(f'Bot deu problema ' + datetime.today().strftime('%A, %B %d, %Y %H:%M:%S'))
 
 while True:
-    iURL = "http://apiadvisor.climatempo.com.br/api/v1/weather/locale/" + str(iCIDADE) + "/current?token=" + iTOKEN
-    iRESPONSE = requests.request("GET", iURL)
-    iRETORNO_REQ = json.loads(iRESPONSE.text)
+    dt = datetime.now() + timedelta(hours=1)
+    principal()
+    dt = dt.replace(minute=10)
 
-    Temperatura = str(iRETORNO_REQ['data']['temperature'])
-    Condicao = str(iRETORNO_REQ['data']['condition'])
-    sensacao = str(iRETORNO_REQ['data']['sensation'])
-    velVento = str(iRETORNO_REQ['data']['wind_velocity'])
- 
-    formatString = f'Clima em Lages:' + '\n'+datetime.today().strftime('%A, %B %d, %Y %H:%M:%S')+'\nTemperatura: ' + Temperatura + '°C' + '\nSensação Térmica: ' + sensacao + '°C' + '\nCondição Atual: ' + Condicao + '\nVelocidade do vento: ' + velVento +' Km/h'
-    api.update_status(formatString)
-    print(datetime.today().strftime('%A, %B %d, %Y %H:%M:%S'))
-    time.sleep(60*60)
+    while datetime.now() < dt:
+        time.sleep(1)
