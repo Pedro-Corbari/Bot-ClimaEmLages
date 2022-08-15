@@ -34,14 +34,19 @@ def principal():
         else:
             formatString = f'Clima em Lages:' + '\n'+ 'Hora local: '+datetime.today().strftime('%A, %B %d, %Y %H:%M:%S') + '\nMas bah hame do ceu, ta calor.'+'\nTemperatura: ' + str(Temperatura) + '°C' + '\nSensação Térmica: ' + sensacao + '°C' + '\nCondição Atual: ' + Condicao + '\nVelocidade do vento: ' + velVento +' Km/h'
         api.update_status(formatString)
-        print(f'Estou funcionando '+ datetime.today().strftime('%A, %B %d, %Y %H:%M:%S'))
+        print(f'Status Update '+ datetime.today().strftime('%A, %B %d, %Y %H:%M:%S'))
     except:
         print(f'Bot deu problema ' + datetime.today().strftime('%A, %B %d, %Y %H:%M:%S'))
 
 while True:
-    dt = datetime.now() + timedelta(hours=1)
+    dt = datetime.now() + timedelta(hours=2)
     principal()
     dt = dt.replace(minute=10)
 
+    
     while datetime.now() < dt:
         time.sleep(1)
+        if (datetime.now().minute % 10) == 0 and datetime.now().second == 00:
+            print(f'Estou funcionando '+ datetime.today().strftime('%A, %B %d, %Y %H:%M:%S'))
+
+#py -3 bot.py
