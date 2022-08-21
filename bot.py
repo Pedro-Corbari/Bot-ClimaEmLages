@@ -28,11 +28,16 @@ def principal():
         Condicao = str(iRETORNO_REQ['data']['condition'])
         sensacao = str(iRETORNO_REQ['data']['sensation'])
         velVento = str(iRETORNO_REQ['data']['wind_velocity'])
+        
     
-        if Temperatura < 20:
+        if Temperatura < 20 and Temperatura > 6 :
             formatString = f'Clima em Lages:' + '\n'+ 'Hora local: '+datetime.today().strftime('%A, %B %d, %Y %H:%M:%S') + '\nSaia de Japona Homee!'+'\nTemperatura: ' + str(Temperatura) + '°C' + '\nSensação Térmica: ' + sensacao + '°C' + '\nCondição Atual: ' + Condicao + '\nVelocidade do vento: ' + velVento +' Km/h'
+        elif Temperatura <= 6:
+            formatString = f'Clima em Lages:' + '\n'+ 'Hora local: '+datetime.today().strftime('%A, %B %d, %Y %H:%M:%S') + '\nSaia com umas 3 Japona Homee!'+'\nTemperatura: ' + str(Temperatura) + '°C' + '\nSensação Térmica: ' + sensacao + '°C' + '\nCondição Atual: ' + Condicao + '\nVelocidade do vento: ' + velVento +' Km/h'
+        
         else:
             formatString = f'Clima em Lages:' + '\n'+ 'Hora local: '+datetime.today().strftime('%A, %B %d, %Y %H:%M:%S') + '\nMas bah hame do ceu, ta calor.'+'\nTemperatura: ' + str(Temperatura) + '°C' + '\nSensação Térmica: ' + sensacao + '°C' + '\nCondição Atual: ' + Condicao + '\nVelocidade do vento: ' + velVento +' Km/h'
+        
         api.update_status(formatString)
         print(f'Status Update '+ datetime.today().strftime('%A, %B %d, %Y %H:%M:%S'))
     except:
